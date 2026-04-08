@@ -11,79 +11,63 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 object PhysicsPalette {
-    val Ink = Color(0xFF363237)
-    val Aluminum = Color(0xFFD09683)
-    val Paper = Color(0xFFFFF8F4)
-    val Ruby = Color(0xFFD09683)
-    val Surface = Color(0xFF73605B)
-    val SurfaceRaised = Color(0xFF2D4262)
-    val Border = Color(0xFFD09683)
-    val BorderStrong = Color(0xFFD09683)
-    val InkMuted = Color(0xFFF0D7CD)
+    val Backdrop = Color(0xFF2C2A27)
+    val Background = Color(0xFFF0F4F8)
+    val Surface = Color(0xFFE8EEF4)
+    val Card = Color(0xFFFFFFFF)
+    val TextSecondary = Color(0xFF6A90A8)
+    val Accent = Color(0xFF4A7AA0)
+    val TextPrimary = Color(0xFF1A3050)
 }
 
 private val PhysicsColors = lightColorScheme(
-    primary = PhysicsPalette.Ruby,
-    onPrimary = PhysicsPalette.Paper,
-    secondary = PhysicsPalette.Aluminum,
-    onSecondary = PhysicsPalette.Ink,
-    background = PhysicsPalette.Ink,
-    onBackground = PhysicsPalette.Paper,
+    primary = PhysicsPalette.Accent,
+    onPrimary = PhysicsPalette.Card,
+    secondary = PhysicsPalette.TextSecondary,
+    onSecondary = PhysicsPalette.Card,
+    background = PhysicsPalette.Background,
+    onBackground = PhysicsPalette.TextPrimary,
     surface = PhysicsPalette.Surface,
-    onSurface = PhysicsPalette.Paper,
-    outline = PhysicsPalette.Aluminum,
+    onSurface = PhysicsPalette.TextPrimary,
+    outline = PhysicsPalette.Accent,
 )
 
-val Typography.cardPrompt: TextStyle
+val Typography.buttonText: TextStyle
+    get() = TextStyle(
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 16.sp,
+        lineHeight = 20.sp,
+    )
+
+val Typography.cardText: TextStyle
     get() = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Medium,
-        fontSize = 19.sp,
+        fontSize = 18.sp,
         lineHeight = 30.sp,
     )
 
-private val PhysicsTypography = Typography(
-    headlineLarge = TextStyle(
-        fontFamily = FontFamily.Serif,
+val Typography.formulaText: TextStyle
+    get() = TextStyle(
+        fontFamily = FontFamily.Monospace,
         fontWeight = FontWeight.SemiBold,
         fontSize = 32.sp,
         lineHeight = 38.sp,
-    ),
-    headlineMedium = TextStyle(
-        fontFamily = FontFamily.Serif,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 28.sp,
-        lineHeight = 34.sp,
-    ),
+    )
+
+private val PhysicsTypography = Typography(
     titleLarge = TextStyle(
-        fontFamily = FontFamily.Serif,
+        fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
+        fontSize = 18.sp,
+        lineHeight = 22.sp,
     ),
     bodyLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-    ),
-    bodyMedium = TextStyle(
-        fontFamily = FontFamily.SansSerif,
-        fontWeight = FontWeight.Normal,
-        fontSize = 15.sp,
-        lineHeight = 22.sp,
-    ),
-    labelLarge = TextStyle(
-        fontFamily = FontFamily.SansSerif,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 14.sp,
-        lineHeight = 18.sp,
-    ),
-    displaySmall = TextStyle(
-        fontFamily = FontFamily.Monospace,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 34.sp,
-        lineHeight = 40.sp,
+        fontWeight = FontWeight.Medium,
+        fontSize = 18.sp,
+        lineHeight = 30.sp,
     ),
 )
 

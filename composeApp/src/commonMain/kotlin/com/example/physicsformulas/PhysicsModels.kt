@@ -16,4 +16,5 @@ data class PhysicsFormula(
     val prompt: String,
     val formula: String,
     val explanation: String,
+    val imageName: String,
 )
