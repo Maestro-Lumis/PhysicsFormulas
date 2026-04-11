@@ -19,6 +19,7 @@ class PhysicsRepository(
                     prompt = formula.prompt,
                     formula = formula.formula,
                     explanation = formula.explanation,
+                    imageName = formula.image_name,
                 )
             }
 

@@ -5,7 +5,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,13 +31,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun App(appContainer: PhysicsAppContainer) {
@@ -116,19 +112,22 @@ private fun SectionsScreen(
 ) {
     val dims = LocalAppDimensions.current
 
-    LazyColumn(
+    Box(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(
-            top = dims.sectionSpacing,
-            bottom = dims.sectionSpacing,
-        ),
-        verticalArrangement = Arrangement.spacedBy(dims.sectionSpacing),
+        contentAlignment = Alignment.Center,
     ) {
-        items(sections, key = { it.id }) { section ->
-            SectionButton(
-                title = section.title.lowercase(),
-                onClick = { onSectionClick(section.id) },
-            )
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(vertical = dims.sectionSpacing),
+            verticalArrangement = Arrangement.spacedBy(dims.sectionSpacing),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            items(sections, key = { it.id }) { section ->
+                SectionButton(
+                    title = section.title,
+                    onClick = { onSectionClick(section.id) },
+                )
+            }
         }
     }
 }
@@ -152,17 +151,12 @@ private fun SectionButton(
             contentColor = PhysicsPalette.TextPrimary,
         ),
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.CenterStart,
-        ) {
-            Text(
-                text = title,
-                fontSize = dims.sectionFontSize,
-                fontStyle = FontStyle.Italic,
-                modifier = Modifier.padding(start = 8.dp),
-            )
-        }
+        Text(
+            text = title,
+            fontSize = dims.sectionFontSize,
+            fontStyle = FontStyle.Italic,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
@@ -180,6 +174,7 @@ private fun FormulaScreen(
     Column(modifier = Modifier.fillMaxSize()) {
 
         if (showBackButton) {
+            Spacer(modifier = Modifier.height(dims.cardTopSpacing))
             OutlinedButton(
                 onClick = onBackClick,
                 modifier = Modifier
@@ -199,13 +194,13 @@ private fun FormulaScreen(
                     fontStyle = FontStyle.Italic,
                 )
             }
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(dims.cardWeight),
+                .weight(1f),
             shape = RoundedCornerShape(dims.cardCorner),
             color = PhysicsPalette.Card,
             border = BorderStroke(2.dp, PhysicsPalette.Accent),
@@ -228,7 +223,7 @@ private fun FormulaScreen(
                                 .fillMaxWidth()
                                 .padding(8.dp),
                         )
-                    }else {
+                    } else {
                         Text(
                             text = "${formula.title}\n\n${formula.prompt}",
                             fontSize = dims.hintFontSize,
@@ -241,7 +236,7 @@ private fun FormulaScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(dims.cardBottomSpacing))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -284,6 +279,8 @@ private fun FormulaScreen(
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(dims.cardBottomSpacing))
     }
 }
 
