@@ -1,9 +1,5 @@
 package com.example.physicsformulas
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -204,7 +200,6 @@ private fun FormulaScreen(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // карточка
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -232,49 +227,43 @@ private fun FormulaScreen(
                     .padding(dims.cardInnerPadding),
                 contentAlignment = Alignment.Center,
             ) {
-                AnimatedContent(
-                    targetState = uiState.isFormulaVisible,
-                    transitionSpec = { fadeIn() togetherWith fadeOut() },
-                ) { visible ->
-                    if (visible) {
-                        FormulaImage(
-                            imageName = formula.imageName,
-                            contentDescription = "${formula.label}. ${formula.prompt}",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
+                if (uiState.isFormulaVisible) {
+                    FormulaImage(
+                        imageName = formula.imageName,
+                        contentDescription = "${formula.label}. ${formula.prompt}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                    )
+                } else {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        Text(
+                            text = "КИМ ${formula.kim}",
+                            fontSize = dims.kimFontSize,
+                            color = PhysicsPalette.Accent,
+                            fontStyle = FontStyle.Italic,
+                            textAlign = TextAlign.Center,
                         )
-                    } else {
-                        // КИМ + раздел + вопрос
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxSize(),
-                        ) {
-                            Text(
-                                text = "КИМ ${formula.kim}",
-                                fontSize = dims.kimFontSize,
-                                color = PhysicsPalette.Accent,
-                                fontStyle = FontStyle.Italic,
-                                textAlign = TextAlign.Center,
-                            )
-                            Spacer(modifier = Modifier.height(dims.cardLabelSpacing))
-                            Text(
-                                text = formula.label,
-                                fontSize = dims.labelFontSize,
-                                color = Color(0xFFB97040),
-                                fontStyle = FontStyle.Italic,
-                                textAlign = TextAlign.Center,
-                            )
-                            Spacer(modifier = Modifier.height(dims.cardLabelSpacing))
-                            Text(
-                                text = formula.prompt,
-                                fontSize = dims.hintFontSize,
-                                color = PhysicsPalette.Accent,
-                                textAlign = TextAlign.Center,
-                                fontStyle = FontStyle.Italic,
-                            )
-                        }
+                        Spacer(modifier = Modifier.height(dims.cardLabelSpacing))
+                        Text(
+                            text = formula.label,
+                            fontSize = dims.labelFontSize,
+                            color = Color(0xFFB97040),
+                            fontStyle = FontStyle.Italic,
+                            textAlign = TextAlign.Center,
+                        )
+                        Spacer(modifier = Modifier.height(dims.cardLabelSpacing))
+                        Text(
+                            text = formula.prompt,
+                            fontSize = dims.hintFontSize,
+                            color = PhysicsPalette.Accent,
+                            textAlign = TextAlign.Center,
+                            fontStyle = FontStyle.Italic,
+                        )
                     }
                 }
             }
