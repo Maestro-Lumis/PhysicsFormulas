@@ -33,10 +33,13 @@ data class AppDimensions(
     val contentMaxWidth: Dp,
     val buttonFontSize: TextUnit,
     val sectionFontSize: TextUnit,
+    val kimFontSize: TextUnit,
+    val labelFontSize: TextUnit,
     val hintFontSize: TextUnit,
     val formulaFontSize: TextUnit,
     val explanationFontSize: TextUnit,
     val useTwoColumnLayout: Boolean,
+    val cardLabelSpacing: Dp,
 )
 
 internal fun dimensionsFor(
@@ -61,10 +64,13 @@ internal fun dimensionsFor(
         contentMaxWidth = 420.dp,
         buttonFontSize = 18.sp,
         sectionFontSize = 18.sp,
-        hintFontSize = 20.sp,
+        kimFontSize = 22.sp,
+        labelFontSize = 22.sp,
+        hintFontSize = 22.sp,
         formulaFontSize = 32.sp,
         explanationFontSize = 17.sp,
         useTwoColumnLayout = false,
+        cardLabelSpacing = 24.dp,
     )
 
     ScreenType.PHONE -> AppDimensions(
@@ -84,10 +90,13 @@ internal fun dimensionsFor(
         contentMaxWidth = 600.dp,
         buttonFontSize = 20.sp,
         sectionFontSize = 20.sp,
-        hintFontSize = 22.sp,
+        kimFontSize = 24.sp,
+        labelFontSize = 24.sp,
+        hintFontSize = 24.sp,
         formulaFontSize = 38.sp,
         explanationFontSize = 18.sp,
         useTwoColumnLayout = false,
+        cardLabelSpacing = 28.dp,
     )
 
     ScreenType.PHONE_LARGE -> AppDimensions(
@@ -107,10 +116,13 @@ internal fun dimensionsFor(
         contentMaxWidth = 560.dp,
         buttonFontSize = 20.sp,
         sectionFontSize = 20.sp,
-        hintFontSize = 22.sp,
+        kimFontSize = 30.sp,
+        labelFontSize = 30.sp,
+        hintFontSize = 30.sp,
         formulaFontSize = 38.sp,
         explanationFontSize = 18.sp,
         useTwoColumnLayout = orientation == Orientation.LANDSCAPE,
+        cardLabelSpacing = 32.dp,
     )
 
     ScreenType.TABLET -> AppDimensions(
@@ -130,10 +142,13 @@ internal fun dimensionsFor(
         contentMaxWidth = 640.dp,
         buttonFontSize = 22.sp,
         sectionFontSize = 22.sp,
-        hintFontSize = 24.sp,
+        kimFontSize = 34.sp,
+        labelFontSize = 36.sp,
+        hintFontSize = 36.sp,
         formulaFontSize = 44.sp,
         explanationFontSize = 20.sp,
         useTwoColumnLayout = true,
+        cardLabelSpacing = 40.dp,
     )
 }
 

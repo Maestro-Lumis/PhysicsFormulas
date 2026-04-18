@@ -25,10 +25,13 @@ class PhysicsViewModel(
 
     fun openSection(sectionId: Long) {
         _uiState.update { state ->
+            val section = state.sections.firstOrNull { it.id == sectionId }
+            val shuffled = section?.formulas?.shuffled() ?: emptyList()
             state.copy(
                 selectedSectionId = sectionId,
                 currentFormulaIndex = 0,
                 isFormulaVisible = false,
+                shuffledFormulas = shuffled,
             )
         }
     }
@@ -39,17 +42,26 @@ class PhysicsViewModel(
                 selectedSectionId = null,
                 currentFormulaIndex = 0,
                 isFormulaVisible = false,
+                shuffledFormulas = emptyList(),
             )
         }
     }
 
     fun showNextFormula() {
         _uiState.update { state ->
-            val section = state.selectedSection ?: return@update state
-            val nextIndex = (state.currentFormulaIndex + 1) % section.formulas.size
-
+            val nextIndex = (state.currentFormulaIndex + 1) % state.shuffledFormulas.size
             state.copy(
                 currentFormulaIndex = nextIndex,
+                isFormulaVisible = false,
+            )
+        }
+    }
+
+    fun showPrevFormula() {
+        _uiState.update { state ->
+            val prevIndex = (state.currentFormulaIndex - 1 + state.shuffledFormulas.size) % state.shuffledFormulas.size
+            state.copy(
+                currentFormulaIndex = prevIndex,
                 isFormulaVisible = false,
             )
         }

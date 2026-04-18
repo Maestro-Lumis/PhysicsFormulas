@@ -18,6 +18,7 @@ object PhysicsPalette {
     val TextSecondary = Color(0xFF6A90A8)
     val Accent = Color(0xFF4A7AA0)
     val TextPrimary = Color(0xFF1A3050)
+
 }
 
 private val PhysicsColors = lightColorScheme(

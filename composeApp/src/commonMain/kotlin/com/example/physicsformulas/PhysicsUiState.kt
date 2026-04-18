@@ -6,10 +6,11 @@ data class PhysicsUiState(
     val selectedSectionId: Long? = null,
     val currentFormulaIndex: Int = 0,
     val isFormulaVisible: Boolean = false,
+    val shuffledFormulas: List<PhysicsFormula> = emptyList(),
 ) {
     val selectedSection: PhysicsSection?
         get() = sections.firstOrNull { it.id == selectedSectionId }
 
     val currentFormula: PhysicsFormula?
-        get() = selectedSection?.formulas?.getOrNull(currentFormulaIndex)
+        get() = shuffledFormulas.getOrNull(currentFormulaIndex)
 }

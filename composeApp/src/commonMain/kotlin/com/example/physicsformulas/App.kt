@@ -33,8 +33,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 
 @Composable
 fun App(appContainer: PhysicsAppContainer) {
@@ -49,6 +52,7 @@ fun App(appContainer: PhysicsAppContainer) {
                 onSectionClick = viewModel::openSection,
                 onBackClick = viewModel::returnToSections,
                 onNextClick = viewModel::showNextFormula,
+                onPrevClick = viewModel::showPrevFormula,
                 onToggleFormula = viewModel::toggleFormulaVisibility,
             )
         }
@@ -61,6 +65,7 @@ private fun PhysicsRoot(
     onSectionClick: (Long) -> Unit,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
+    onPrevClick: () -> Unit,
     onToggleFormula: () -> Unit,
 ) {
     val dims = LocalAppDimensions.current
@@ -88,6 +93,7 @@ private fun PhysicsRoot(
                     uiState = uiState,
                     onBackClick = onBackClick,
                     onNextClick = onNextClick,
+                    onPrevClick = onPrevClick,
                     onToggleFormula = onToggleFormula,
                 )
             }
@@ -165,6 +171,7 @@ private fun FormulaScreen(
     uiState: PhysicsUiState,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
+    onPrevClick: () -> Unit,
     onToggleFormula: () -> Unit,
     showBackButton: Boolean = true,
 ) {
@@ -197,10 +204,24 @@ private fun FormulaScreen(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
+        // карточка
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f)
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = { onToggleFormula() })
+                }
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures(
+                        onDragEnd = {},
+                        onHorizontalDrag = { change, dragAmount ->
+                            change.consume()
+                            if (dragAmount < -40f) onNextClick()
+                            else if (dragAmount > 40f) onPrevClick()
+                        }
+                    )
+                },
             shape = RoundedCornerShape(dims.cardCorner),
             color = PhysicsPalette.Card,
             border = BorderStroke(2.dp, PhysicsPalette.Accent),
@@ -218,19 +239,42 @@ private fun FormulaScreen(
                     if (visible) {
                         FormulaImage(
                             imageName = formula.imageName,
-                            contentDescription = formula.title,
+                            contentDescription = "${formula.label}. ${formula.prompt}",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp),
                         )
                     } else {
-                        Text(
-                            text = "${formula.title}\n\n${formula.prompt}",
-                            fontSize = dims.hintFontSize,
-                            color = PhysicsPalette.TextSecondary,
-                            textAlign = TextAlign.Center,
-                            fontStyle = FontStyle.Italic,
-                        )
+                        // КИМ + раздел + вопрос
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxSize(),
+                        ) {
+                            Text(
+                                text = "КИМ ${formula.kim}",
+                                fontSize = dims.kimFontSize,
+                                color = PhysicsPalette.Accent,
+                                fontStyle = FontStyle.Italic,
+                                textAlign = TextAlign.Center,
+                            )
+                            Spacer(modifier = Modifier.height(dims.cardLabelSpacing))
+                            Text(
+                                text = formula.label,
+                                fontSize = dims.labelFontSize,
+                                color = Color(0xFFB97040),
+                                fontStyle = FontStyle.Italic,
+                                textAlign = TextAlign.Center,
+                            )
+                            Spacer(modifier = Modifier.height(dims.cardLabelSpacing))
+                            Text(
+                                text = formula.prompt,
+                                fontSize = dims.hintFontSize,
+                                color = PhysicsPalette.Accent,
+                                textAlign = TextAlign.Center,
+                                fontStyle = FontStyle.Italic,
+                            )
+                        }
                     }
                 }
             }
@@ -281,91 +325,5 @@ private fun FormulaScreen(
         }
 
         Spacer(modifier = Modifier.height(dims.cardBottomSpacing))
-    }
-}
-
-@Preview(showBackground = true, widthDp = 360, heightDp = 640)
-@Composable
-private fun PreviewSections() {
-    PhysicsFormulasTheme {
-        CompositionLocalProvider(
-            LocalAppDimensions provides dimensionsFor(ScreenType.PHONE, Orientation.PORTRAIT)
-        ) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = PhysicsPalette.Surface,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp, vertical = 20.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    SectionsScreen(
-                        sections = listOf(
-                            PhysicsSection(1, "Механика", "", 3, emptyList()),
-                            PhysicsSection(2, "Молекулярная физика", "", 3, emptyList()),
-                            PhysicsSection(3, "Электростатика", "", 3, emptyList()),
-                            PhysicsSection(4, "Электродинамика", "", 3, emptyList()),
-                            PhysicsSection(5, "Колебания и волны", "", 3, emptyList()),
-                            PhysicsSection(6, "Оптика", "", 3, emptyList()),
-                        ),
-                        onSectionClick = {},
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true, widthDp = 360, heightDp = 640)
-@Composable
-private fun PreviewFormula() {
-    PhysicsFormulasTheme {
-        CompositionLocalProvider(
-            LocalAppDimensions provides dimensionsFor(ScreenType.PHONE, Orientation.PORTRAIT)
-        ) {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = PhysicsPalette.Surface,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp, vertical = 20.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    FormulaScreen(
-                        uiState = PhysicsUiState(
-                            isLoading = false,
-                            sections = listOf(
-                                PhysicsSection(
-                                    id = 1,
-                                    title = "Механика",
-                                    description = "",
-                                    formulaCount = 1,
-                                    formulas = listOf(
-                                        PhysicsFormula(
-                                            id = 1,
-                                            sectionId = 1,
-                                            title = "Второй закон Ньютона",
-                                            label = "",
-                                            prompt = "Как связаны сила, масса и ускорение?",
-                                            formula = "F = ma",
-                                            explanation = "сила равна произведению массы на ускорение",
-                                            imageName = "formula_f_ma.png",
-                                        )
-                                    ),
-                                )
-                            ),
-                            selectedSectionId = 1,
-                        ),
-                        onBackClick = {},
-                        onNextClick = {},
-                        onToggleFormula = {},
-                    )
-                }
-            }
-        }
     }
 }

@@ -10,25 +10,29 @@ class PhysicsRepository(
         val sections = queries.selectSections().executeAsList()
 
         return sections.map { section ->
-            val formulas = queries.selectFormulasBySection(section.id).executeAsList().map { formula ->
-                PhysicsFormula(
-                    id = formula.id,
-                    sectionId = formula.section_id,
-                    title = formula.title,
-                    label = formula.label,
-                    prompt = formula.prompt,
-                    formula = formula.formula,
-                    explanation = formula.explanation,
-                    imageName = formula.image_name,
-                )
-            }
+
+            val formulas = queries
+                .selectFormulasBySection(section.id)
+                .executeAsList()
+                .map { formula ->
+
+                    PhysicsFormula(
+                        id = formula.id,
+                        sectionId = formula.section_id,
+                        kim = formula.kim,
+                        label = formula.label,
+                        prompt = formula.prompt,
+                        explanation = formula.explanation,
+                        imageName = formula.image_name
+                    )
+                }
 
             PhysicsSection(
                 id = section.id,
                 title = section.title,
                 description = section.description,
                 formulaCount = section.formulaCount.toInt(),
-                formulas = formulas,
+                formulas = formulas
             )
         }
     }

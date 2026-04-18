@@ -11,10 +11,9 @@ data class PhysicsSection(
 data class PhysicsFormula(
     val id: Long,
     val sectionId: Long,
-    val title: String,
+    val kim: Long,
     val label: String,
     val prompt: String,
-    val formula: String,
     val explanation: String,
     val imageName: String,
 )
