@@ -87,6 +87,7 @@ sqldelight {
     databases {
         create("PhysicsDatabase") {
             packageName.set("com.example.physicsformulas.db")
+            version = 3
         }
     }
 }
