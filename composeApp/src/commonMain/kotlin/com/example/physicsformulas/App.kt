@@ -85,6 +85,9 @@ private fun PhysicsRoot(
                     sections = uiState.sections,
                     onSectionClick = onSectionClick,
                 )
+                uiState.shuffledFormulas.isEmpty() -> EmptySection(
+                    onBackClick = onBackClick,
+                )
                 else -> FormulaScreen(
                     uiState = uiState,
                     onBackClick = onBackClick,
@@ -94,6 +97,47 @@ private fun PhysicsRoot(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun EmptySection(
+    onBackClick: () -> Unit,
+) {
+    val dims = LocalAppDimensions.current
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Spacer(modifier = Modifier.height(dims.cardTopSpacing))
+        OutlinedButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .fillMaxWidth(dims.backButtonFraction)
+                .height(dims.buttonHeight),
+            shape = RoundedCornerShape(dims.buttonCorner),
+            border = BorderStroke(2.dp, PhysicsPalette.Accent),
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = PhysicsPalette.Card,
+                contentColor = PhysicsPalette.Accent,
+            ),
+        ) {
+            Text(
+                text = "к разделам",
+                fontSize = dims.buttonFontSize,
+                fontStyle = FontStyle.Italic,
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = "В разработке\n\nИнформация скоро появится",
+            fontSize = dims.hintFontSize,
+            color = PhysicsPalette.TextSecondary,
+            textAlign = TextAlign.Center,
+            fontStyle = FontStyle.Italic,
+        )
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
@@ -228,42 +272,62 @@ private fun FormulaScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 if (uiState.isFormulaVisible) {
-                    FormulaImage(
-                        imageName = formula.imageName,
-                        contentDescription = "${formula.label}. ${formula.prompt}",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                    )
-                } else {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
+                    if (formula.imageName.isBlank() || formula.imageName == "img.png") {
                         Text(
-                            text = "КИМ ${formula.kim}",
-                            fontSize = dims.kimFontSize,
-                            color = PhysicsPalette.Accent,
-                            fontStyle = FontStyle.Italic,
-                            textAlign = TextAlign.Center,
-                        )
-                        Spacer(modifier = Modifier.height(dims.cardLabelSpacing))
-                        Text(
-                            text = formula.label,
-                            fontSize = dims.labelFontSize,
-                            color = Color(0xFFB97040),
-                            fontStyle = FontStyle.Italic,
-                            textAlign = TextAlign.Center,
-                        )
-                        Spacer(modifier = Modifier.height(dims.cardLabelSpacing))
-                        Text(
-                            text = formula.prompt,
+                            text = "В разработке\n\nИнформация скоро появится",
                             fontSize = dims.hintFontSize,
-                            color = PhysicsPalette.Accent,
+                            color = PhysicsPalette.TextSecondary,
                             textAlign = TextAlign.Center,
                             fontStyle = FontStyle.Italic,
                         )
+                    } else {
+                        FormulaImage(
+                            imageName = formula.imageName,
+                            contentDescription = "${formula.label}. ${formula.prompt}",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp),
+                        )
+                    }
+                } else {
+                    if (formula.prompt.isBlank()) {
+                        Text(
+                            text = "В разработке\n\nИнформация скоро появится",
+                            fontSize = dims.hintFontSize,
+                            color = PhysicsPalette.TextSecondary,
+                            textAlign = TextAlign.Center,
+                            fontStyle = FontStyle.Italic,
+                        )
+                    } else {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxSize(),
+                        ) {
+                            Text(
+                                text = "КИМ ${formula.kim}",
+                                fontSize = dims.kimFontSize,
+                                color = PhysicsPalette.Accent,
+                                fontStyle = FontStyle.Italic,
+                                textAlign = TextAlign.Center,
+                            )
+                            Spacer(modifier = Modifier.height(dims.cardLabelSpacing))
+                            Text(
+                                text = formula.label,
+                                fontSize = dims.labelFontSize,
+                                color = Color(0xFFB97040),
+                                fontStyle = FontStyle.Italic,
+                                textAlign = TextAlign.Center,
+                            )
+                            Spacer(modifier = Modifier.height(dims.cardLabelSpacing))
+                            Text(
+                                text = formula.prompt,
+                                fontSize = dims.hintFontSize,
+                                color = PhysicsPalette.Accent,
+                                textAlign = TextAlign.Center,
+                                fontStyle = FontStyle.Italic,
+                            )
+                        }
                     }
                 }
             }
